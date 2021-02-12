@@ -49,6 +49,7 @@ If you have [gcloud tool](https://cloud.google.com/sdk/gcloud/), you can run
 
 ```no-highlight
 gcloud beta firebase test ios models list
+gcloud beta firebase test android models list
 ```
 
 to get a list of supported devices and their identifiers.
@@ -57,9 +58,11 @@ Alternatively all available devices can also be seen [here](https://firebase.goo
 
 ## Actions
 
-### `firebase_test_lab_ios_xctest`
+### `firebase_test_lab_run_tests`
 
-Submit your iOS app to Firebase Test Lab and run XCTest. Refer to [this document](https://firebase.google.com/docs/test-lab/ios/command-line) for more details about Firebase Test Lab specific arguments.
+Submit your app to Firebase Test Lab and run your tests. Refer to [this document](https://firebase.google.com/docs/test-lab/) for more details about Firebase Test Lab specific arguments.
+
+Example of iOS
 
 ```ruby
 scan(
@@ -70,12 +73,12 @@ scan(
   sdk: 'iphoneos',                    # Required
   should_zip_build_products: true     # Must be true to set the correct format for Firebase Test Lab
 )
-firebase_test_lab_ios_xctest(
+firebase_test_lab_run_tests(
   gcp_project: 'your-google-project', # Your Google Cloud project name
   devices: [                          # Device(s) to run tests on
     {
-      ios_model_id: 'iphonex',        # Device model ID, see gcloud command above
-      ios_version_id: '11.2',         # iOS version ID, see gcloud command above
+      model: 'iphonex',               # Device model ID, see gcloud command above
+      version: '11.2',                # iOS version ID, see gcloud command above
       locale: 'en_US',                # Optional: default to en_US if not set
       orientation: 'portrait'         # Optional: default to portrait if not set
     }
@@ -85,15 +88,21 @@ firebase_test_lab_ios_xctest(
 
 **Available parameters:**
 
-- `app_path`: You may provide a different path in the local filesystem (e.g: `/path/to/app-bundle.zip`) or on Google Cloud Storage (`gs://your-bucket/path/to/app-bundle.zip`) that points to an app bundle as specified [here](https://firebase.google.com/docs/test-lab/ios/command-line#build_xctests_for_your_app). If a Google Cloud Storage path is used, the service account must have read access to such file.
+- `test_ios`: true: Test iOS, false: Test Android
+- `ios_app_path`: You may provide a different path in the local filesystem (e.g: `/path/to/app-bundle.zip`) or on Google Cloud Storage (`gs://your-bucket/path/to/app-bundle.zip`) that points to an app bundle as specified [here](https://firebase.google.com/docs/test-lab/ios/command-line#build_xctests_for_your_app). If a Google Cloud Storage path is used, the service account must have read access to such file.
 - `gcp_project`: The Google Cloud project name for Firebase Test Lab to run on.
 - `gcp_requests_timeout`: The timeout, in seconds, to use for all requests to the Google Cloud platform (e.g. uploading your app bundle ZIP). If this parameter is omitted, Google Cloud SDK's default requests timeout value will be used. If you are finding that your ZIP uploads are timing out due to the ZIP file being large and not completing within the set timeout time, increase this value.
 - `gcp_additional_client_info`: Additional information to include in the client information of your test job. For example, if you'd like to include metadata to use in a Google cloud function in response to your test job's outcome. See https://firebase.google.com/docs/reference/functions/functions.testLab.ClientInfo for more information.
 - `oauth_key_file_path`: The path to the Google Cloud service account key. If not set, the Google application default credential will be used.
-- `devices`: An array of devices for your app to be tested on. Each device is represented as a ruby hash, with `ios_model_id`, `ios_version_id`, `locale` and `orientation` properties, the first two of which are required. If not set, it will default to iPhone X on iOS 11.2. This array cannot be empty.
+- `devices`: An array of devices for your app to be tested on. Each device is represented as a ruby hash, with `model`, `version`, `locale` and `orientation` properties, the first two of which are required. If not set, it will default to iPhone X on iOS 11.2. This array cannot be empty.
 - `async`: If set to true, the action will not wait for the test results but exit immediately.
 - `timeout_sec`: After how long will the test be abandoned by Firebase Test Lab. Duration should be given in seconds.
 - `result_storage`: Designate which location on Google Cloud Storage to store the test results. This should be a directory (e.g: `gs://your-bucket/tests/`)
+- `android_app_apk`: The path for your app apk. Default: app/build/outputs/apk/debug/app-debug.apk
+- `android_test_apk`: The path for your android test apk. Default: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+- `android_test_target`: The test target(s) for your android test apk. Default: Empty
+- `retry_if_failed`: If set to true and a test failed, the test suite will be rerun once. Default: nil, no reruns
+- `print_successful_test`: If set to true all successful tests will be printed, by default only failed tests will be printed. Default: false, no successful tests printed
 
 ## Issues and Feedback
 
