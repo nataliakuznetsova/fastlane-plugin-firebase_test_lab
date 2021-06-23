@@ -63,8 +63,8 @@ module Fastlane
                                        optional: true,
                                        type: Integer,
                                        verify_block: proc do |value|
-                                         UI.user_error!("Timeout must be less or equal to 45 minutes.") \
-                                           if value <= 0 || value > 45 * 60
+                                         UI.user_error!("Timeout must be more then zero.") \
+                                           if value <= 0
                                        end),
           FastlaneCore::ConfigItem.new(key: :result_storage,
                                        description: "GCS path to store test results",
