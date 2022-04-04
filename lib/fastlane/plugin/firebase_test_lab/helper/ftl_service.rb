@@ -155,7 +155,12 @@ module Fastlane
                 orchestratorOption: "USE_ORCHESTRATOR",
                 testTargets: [
                   android_test_target
-                ]
+                ],
+                shardingOption: {
+                  uniformSharding: {
+                    numShards: 2
+                  }
+                }
               }
             },
             environmentMatrix: {
