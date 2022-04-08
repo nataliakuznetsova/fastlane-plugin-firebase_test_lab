@@ -86,7 +86,7 @@ module Fastlane
         end
       end
 
-      def start_job(test_ios, gcp_project, app_path, test_app_path, result_path, devices, timeout_sec, additional_client_info, xcode_version, retry_if_failed, android_test_target)
+      def start_job(test_ios, gcp_project, app_path, test_app_path, result_path, devices, timeout_sec, disable_video_recording, disable_performance_metrics, additional_client_info, xcode_version, retry_if_failed, android_test_target)
         if additional_client_info.nil? 
           additional_client_info = { version: VERSION }
         else
@@ -117,6 +117,8 @@ module Fastlane
               testTimeout: {
                 seconds: timeout_sec
               },
+              disableVideoRecording: disable_video_recording,
+              disablePerformanceMetrics: disable_performance_metrics,
               iosTestSetup: {},
               iosXcTest: ios_xc_test_hash
             },
@@ -143,7 +145,17 @@ module Fastlane
             projectId: gcp_project,
             testSpecification: {
               testTimeout: {
-                seconds: timeout_sec
+                seconds: timeout_sec,
+              },
+              disableVideoRecording: disable_video_recording,
+              disablePerformanceMetrics: disable_performance_metrics,
+              testSetup: {
+                environmentVariables: [
+                  { 
+                    key: "clearPackageData",
+                    value: "true"
+                  }
+                ]
               },
               androidInstrumentationTest: {
                 appApk: {

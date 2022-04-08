@@ -131,8 +131,15 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :print_successful_test,
                                        description: "Set to true all successful tests will be printed. Default: false",
                                        default_value: false,
+                                       type: Fastlane::Boolean),
+          FastlaneCore::ConfigItem.new(key: :disable_video_recording,
+                                       description: "Set to true if you want to disable video recording. Default: false",
+                                       default_value: false,
+                                       type: Fastlane::Boolean),
+          FastlaneCore::ConfigItem.new(key: :disable_performance_metrics,
+                                       description: "Set to true if you want to disable performance metrics. Default: false",
+                                       default_value: false,
                                        type: Fastlane::Boolean)
-
         ]
       end
 

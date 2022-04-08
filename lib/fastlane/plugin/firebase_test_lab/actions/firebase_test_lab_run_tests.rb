@@ -90,6 +90,8 @@ module Fastlane
                                           result_storage,
                                           params[:devices],
                                           params[:timeout_sec],
+                                          params[:disable_video_recording],
+                                          params[:disable_performance_metrics],
                                           params[:gcp_additional_client_info],
                                           params[:xcode_version],
                                           params[:retry_if_failed],
